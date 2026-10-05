@@ -1,63 +1,80 @@
-.hero-section {
-  padding: 60px 0 40px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #f0f0f2;
-}
-
-.hero-container {
+.figma-hero-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: 960px;
 }
 
-.hero-heading {
-  font-size: 38px;
-  font-weight: 700;
-  color: #171717;
-  line-height: 1.25;
-  margin-bottom: 32px;
+.hero-content-grid {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 36px;
+  align-items: center;
+  padding: 10px 0 20px;
+}
+
+.hero-classroom-col {
+  width: 100%;
+}
+
+.classroom-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.hero-text-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 200px;
+}
+
+.hero-headline {
+  font-size: 23px;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1.35;
   letter-spacing: -0.01em;
 }
 
-.hero-btn-wrap {
+.hero-action-row {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: 16px;
 }
 
-.hero-cta-btn {
-  background-color: #2021a4;
-  color: #ffffff;
-  font-size: 15px;
+.hero-find-link {
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  color: #1d4ed8;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 14px 36px;
-  border-radius: 6px;
+  background: none;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(32, 33, 164, 0.25);
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
 }
 
-.hero-cta-btn:hover {
-  background-color: #171887;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(32, 33, 164, 0.35);
-}
-
-.hero-cta-btn:active {
-  transform: translateY(0);
+.hero-find-link:hover {
+  background-color: #eff6ff;
+  color: #1e40af;
+  transform: translateX(2px);
 }
 
 @media (max-width: 768px) {
-  .hero-heading {
-    font-size: 26px;
-    margin-bottom: 24px;
+  .hero-content-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-  .hero-cta-btn {
-    font-size: 14px;
-    padding: 12px 28px;
+  .hero-text-col {
+    min-height: auto;
+  }
+  .hero-headline {
+    font-size: 20px;
   }
 }

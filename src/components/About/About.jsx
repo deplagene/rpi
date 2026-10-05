@@ -3,18 +3,22 @@ import './About.css';
 
 export default function About() {
   return (
-    <section className="about-section" id="about">
-      <div className="container about-container">
-        <h2 className="about-heading">О нас</h2>
-        <div className="about-text-content">
-          <p className="about-paragraph">
-            Наша учебная платформа соединяет компании, образовательные учреждения и НКО с профессиональными лекторами, спикерами и тренерами.
-          </p>
-          <p className="about-paragraph">
-            Мы упрощаем процесс подбора, бронирования и организации лекций, помогая находить экспертов, которые не просто делятся знаниями, но и вдохновляют аудиторию.
+    <div className="figma-frame-wrap" id="about">
+      <span className="frame-tag-label">О нас</span>
+
+      <div className="figma-card figma-about-card">
+        <div className="about-text-wrapper">
+          <p className="about-mockup-text">
+            Наша учебная платформа  соединяет компании,<br />
+            образовательные учреждения и НКО<br />
+            с профессиональными лекторами, спикерами и тренерами<br />
+            Мы упрощаем процесс подбора, бронирования<br />
+            и организации лекций, помогая находить экспертов,<br />
+            которые не просто делятся знаниями, но и вдохновляют<br />
+            аудиторию.
           </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

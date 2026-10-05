@@ -2,44 +2,58 @@ import React from 'react';
 import './Partners.css';
 
 export default function Partners() {
-  const partners = [
-    {
-      id: 'icl',
-      title: 'iCL',
-      name: 'ICL',
-      desc: 'Высокотехнологичная динамично развивающаяся группа компаний, входящая в число крупнейших IT-предприятий России. Предоставляет весь спектр IT-услуг, проектирование, системную интеграцию и разработку программного обеспечения.'
-    },
-    {
-      id: 'tatneft',
-      title: 'TATNEFT',
-      name: 'Татнефть',
-      desc: 'Одна из крупнейших российских нефтяных компаний, международно признанный холдинг. Активно внедряет инновации, корпоративное обучение специалистов и совместные научно-образовательные программы.'
-    },
-    {
-      id: 'vk',
-      title: 'VK',
-      name: 'VK',
-      desc: 'Ведущая российская технологическая корпорация, развивающая экосистему цифровых сервисов, образовательные инициативы для студентов и партнерские программы с ведущими преподавателями.'
-    }
-  ];
-
   return (
-    <section className="partners-section" id="partners">
-      <div className="container partners-container">
-        <h2 className="partners-heading">Партнеры</h2>
+    <div className="figma-frame-wrap" id="partners">
+      <span className="frame-tag-label">Партнеры</span>
 
-        <div className="partners-grid-3">
-          {partners.map((p) => (
-            <div key={p.id} className="partner-item">
-              <div className="partner-logo-box">
-                <span className={`partner-brand ${p.id}`}>{p.title}</span>
-              </div>
-              <h3 className="partner-item-name">{p.name}</h3>
-              <p className="partner-item-desc">{p.desc}</p>
+      <div className="figma-card figma-partners-card">
+        <div className="partners-two-cols">
+          {/* ICL Partner Column */}
+          <div className="partner-column">
+            <div className="partner-header-row">
+              <a
+                href="https://icl.ru/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="partner-link-group"
+                title="Перейти на сайт ICL"
+              >
+                <div className="icl-logo-visual">
+                  <span className="icl-red-text">iCL</span>
+                </div>
+                <span className="partner-arrow-icon">↗</span>
+              </a>
             </div>
-          ))}
+
+            <p className="partner-text-content">
+              ICL — высокотехнологичная, динамично развивающаяся группа компаний, входящая в число крупнейших ИТ-компаний России, предоставляющая весь спектр ИТ-услуг, проектов, решений и продуктов. Компания была основана в 1991 году на базе завода ЭВМ Казанским производственным объединением вычислительных систем (КПО ВС).
+            </p>
+          </div>
+
+          {/* TATNEFT Partner Column */}
+          <div className="partner-column">
+            <div className="partner-header-row">
+              <a
+                href="https://www.tatneft.ru/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="partner-link-group"
+                title="Перейти на сайт Татнефть"
+              >
+                <div className="tatneft-logo-visual">
+                  <span className="tatneft-flame-icon">🔥</span>
+                  <span className="tatneft-green-text">TATNEFT</span>
+                </div>
+                <span className="partner-arrow-icon">↗</span>
+              </a>
+            </div>
+
+            <p className="partner-text-content">
+              «Татнефть» - одна из крупнейших российских вертикально-интегрированных компаний, в составе которой динамично развиваются нефтегазодобыча, нефтепереработка, нефтегазохимия, сеть АЗС, композитный кластер, электроэнергетика, разработка и производство оборудования для нефтегазовой отрасли и блок сервисных структур.
+            </p>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

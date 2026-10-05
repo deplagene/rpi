@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header/Header';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
 import Partners from './components/Partners/Partners';
@@ -19,8 +18,8 @@ export default function App() {
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'partners', 'lecturers'];
-      const scrollPos = window.scrollY + 100;
+      const sections = ['home', 'partners', 'about', 'lecturers'];
+      const scrollPos = window.scrollY + 120;
 
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
@@ -62,37 +61,30 @@ export default function App() {
   };
 
   return (
-    <div className="site-wrapper">
-      <Header
+    <div className="canvas-wrapper">
+      {/* Frame 1: Главная */}
+      <Hero
         activeSection={activeSection}
         onNavigate={handleNavigate}
         imageSourceMode={imageSourceMode}
         onToggleImageSource={handleToggleImageSource}
+        onFindLecturer={() => handleNavigate('lecturers')}
       />
 
-      <main className="main-content">
-        <Hero onFindLecturer={() => handleNavigate('lecturers')} />
-        <About />
-        <Partners />
-        <LecturersSection
-          lecturers={LECTURERS_DATA}
-          onBookLecturer={handleOpenBooking}
-          imageSourceMode={imageSourceMode}
-        />
-      </main>
+      {/* Frame 2: О нас */}
+      <About />
 
-      <footer className="simple-footer">
-        <div className="container footer-content">
-          <p>© {new Date().getFullYear()} Учебная платформа. Все права защищены.</p>
-          <div className="footer-links-row">
-            <button onClick={() => handleNavigate('home')}>Главная</button>
-            <button onClick={() => handleNavigate('about')}>О нас</button>
-            <button onClick={() => handleNavigate('partners')}>Партнеры</button>
-            <button onClick={() => handleNavigate('lecturers')}>Лекторы</button>
-          </div>
-        </div>
-      </footer>
+      {/* Frame 3: Партнеры */}
+      <Partners />
 
+      {/* Frame 4: Лекторы */}
+      <LecturersSection
+        lecturers={LECTURERS_DATA}
+        onBookLecturer={handleOpenBooking}
+        imageSourceMode={imageSourceMode}
+      />
+
+      {/* Booking Form Modal */}
       <BookingModal
         isOpen={isBookingOpen}
         onClose={handleCloseBooking}

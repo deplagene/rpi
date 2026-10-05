@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Header.css';
 
 export default function Header({
@@ -7,20 +7,10 @@ export default function Header({
   imageSourceMode,
   onToggleImageSource
 }) {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const navLinks = [
     { id: 'home', label: 'Главная' },
-    { id: 'about', label: 'О нас' },
     { id: 'partners', label: 'Партнеры' },
+    { id: 'about', label: 'О нас' },
     { id: 'lecturers', label: 'Лекторы' },
   ];
 
@@ -30,32 +20,31 @@ export default function Header({
   };
 
   return (
-    <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
-      <div className="container header-inner">
-        <nav className="header-nav">
-          {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={`#${link.id}`}
-              className={`nav-item ${activeSection === link.id ? 'active' : ''}`}
-              onClick={(e) => handleLinkClick(e, link.id)}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="header-cloud-ctrl">
-          <button
-            className="cloud-btn"
-            onClick={onToggleImageSource}
-            title="Переключить источник фотографий: Yandex Cloud или локальный диск"
+    <div className="figma-header-bar">
+      <nav className="header-links-group">
+        {navLinks.map((item) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            className={`header-nav-btn ${activeSection === item.id ? 'active' : ''}`}
+            onClick={(e) => handleLinkClick(e, item.id)}
           >
-            <span className="cloud-dot" />
-            <span>{imageSourceMode === 'cloud' ? 'Фото: Yandex Cloud' : 'Фото: Локально'}</span>
-          </button>
-        </div>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      {/* Addition answering Figma Comment #2: "Подумай, чем еще можно дополнить хэдер" */}
+      <div className="header-extra-tools">
+        <button
+          className="header-cloud-toggle"
+          onClick={onToggleImageSource}
+          title="Бонусное задание: переключение источника фото (Yandex Cloud / Локально)"
+        >
+          <span className="dot-status" />
+          <span>{imageSourceMode === 'cloud' ? 'Yandex Cloud' : 'Локально'}</span>
+        </button>
       </div>
-    </header>
+    </div>
   );
 }
