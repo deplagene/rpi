@@ -1,53 +1,43 @@
 import React from 'react';
 import './Partners.css';
-import { PARTNERS_DATA } from '../../data/partnersData';
 
-export default function Partners({ onBecomePartner }) {
+export default function Partners() {
+  const partners = [
+    {
+      id: 'icl',
+      title: 'iCL',
+      name: 'ICL',
+      desc: 'Высокотехнологичная динамично развивающаяся группа компаний, входящая в число крупнейших IT-предприятий России. Предоставляет весь спектр IT-услуг, проектирование, системную интеграцию и разработку программного обеспечения.'
+    },
+    {
+      id: 'tatneft',
+      title: 'TATNEFT',
+      name: 'Татнефть',
+      desc: 'Одна из крупнейших российских нефтяных компаний, международно признанный холдинг. Активно внедряет инновации, корпоративное обучение специалистов и совместные научно-образовательные программы.'
+    },
+    {
+      id: 'vk',
+      title: 'VK',
+      name: 'VK',
+      desc: 'Ведущая российская технологическая корпорация, развивающая экосистему цифровых сервисов, образовательные инициативы для студентов и партнерские программы с ведущими преподавателями.'
+    }
+  ];
+
   return (
-    <section className="section partners-section" id="partners">
-      <div className="container">
-        <div className="section-header">
-          <span className="section-tag">Сотрудничество</span>
-          <h2 className="section-title">Нам доверяют лидеры индустрии и образования</h2>
-          <p className="section-subtitle">
-            Корпорации и ведущие университеты заказывают у наших лекторов авторские программы,
-            курсы повышения квалификации и интенсивные образовательные треки.
-          </p>
-        </div>
+    <section className="partners-section" id="partners">
+      <div className="container partners-container">
+        <h2 className="partners-heading">Партнеры</h2>
 
-        <div className="partners-grid">
-          {PARTNERS_DATA.map((partner) => (
-            <div key={partner.id} className="partner-card">
-              <div className="partner-top">
-                <div
-                  className="partner-logo-pill"
-                  style={{ borderColor: partner.tagColor }}
-                >
-                  <span className="partner-logo-text" style={{ color: partner.tagColor }}>
-                    {partner.logoText}
-                  </span>
-                </div>
-                <span className="partner-badge">{partner.badge}</span>
+        <div className="partners-grid-3">
+          {partners.map((p) => (
+            <div key={p.id} className="partner-item">
+              <div className="partner-logo-box">
+                <span className={`partner-brand ${p.id}`}>{p.title}</span>
               </div>
-
-              <h3 className="partner-name">{partner.name}</h3>
-              <p className="partner-desc">{partner.description}</p>
-
-              <div className="partner-footer">
-                <span className="cooperation-tag">🤝 {partner.cooperation}</span>
-              </div>
+              <h3 className="partner-item-name">{p.name}</h3>
+              <p className="partner-item-desc">{p.desc}</p>
             </div>
           ))}
-        </div>
-
-        <div className="partner-cta-box">
-          <div className="cta-box-text">
-            <h3>Хотите организовать обучение для сотрудников вашей компании?</h3>
-            <p>Подберем лектора под стек вашей команды и составим индивидуальную программу.</p>
-          </div>
-          <button className="btn btn-primary btn-lg" onClick={onBecomePartner}>
-            Стать партнером
-          </button>
         </div>
       </div>
     </section>

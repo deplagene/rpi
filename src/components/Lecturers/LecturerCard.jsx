@@ -3,116 +3,103 @@ import LecturerImage from './LecturerImage';
 
 export default function LecturerCard({
   lecturer,
-  onOpenDetails,
   onBook,
   imageSourceMode
 }) {
-  const [selectedDisciplineId, setSelectedDisciplineId] = useState(lecturer.disciplines[0].id);
+  const [activeDiscIndex, setActiveDiscIndex] = useState(0);
 
-  const activeDiscipline =
-    lecturer.disciplines.find((d) => d.id === selectedDisciplineId) ||
-    lecturer.disciplines[0];
+  const activeDiscipline = lecturer.disciplines[activeDiscIndex] || lecturer.disciplines[0];
 
   return (
-    <article className="lecturer-card">
-      <div className="lecturer-header">
-        <LecturerImage
-          photo={lecturer.photo}
-          cloudPhoto={lecturer.cloudPhoto}
-          alt={lecturer.fullName}
-          imageSourceMode={imageSourceMode}
-        />
-
-        <div className="lecturer-bio">
-          <div className="lecturer-degree-row">
-            <span className={`degree-badge ${lecturer.degree === 'нет' ? 'no-degree' : 'has-degree'}`}>
-              {lecturer.degree === 'нет' ? 'Практикующий специалист' : lecturer.degree}
-            </span>
-            <span className="experience-badge">Стаж: {lecturer.experience} лет</span>
+    <div className="figma-lecturer-card">
+      {/* Top Part matching Figma: Photo on Left, Bio on Right */}
+      <div className="card-top-grid">
+        <div className="card-photo-col">
+          <div className="photo-placeholder-box">
+            <LecturerImage
+              photo={lecturer.photo}
+              cloudPhoto={lecturer.cloudPhoto}
+              alt={lecturer.fullName}
+              imageSourceMode={imageSourceMode}
+            />
           </div>
+        </div>
 
-          <h3 className="lecturer-fullname">{lecturer.fullName}</h3>
+        <div className="card-info-col">
+          <h3 className="lecturer-name-title">{lecturer.fullName}</h3>
 
-          <div className="lecturer-meta">
-            <span className="meta-icon">🎓</span>
-            <span className="meta-education">{lecturer.education}</span>
+          <div className="lecturer-details-list">
+            <div className="detail-row">
+              <span className="detail-label">Образование:</span>
+              <span className="detail-value">{lecturer.education}</span>
+            </div>
+
+            <div className="detail-row">
+              <span className="detail-label">Стаж:</span>
+              <span className="detail-value">{lecturer.experience} лет</span>
+            </div>
+
+            <div className="detail-row">
+              <span className="detail-label">Учёная степень:</span>
+              <span className="detail-value">{lecturer.degree}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="lecturer-disciplines-section">
-        <div className="disciplines-label-row">
-          <span className="disciplines-label">Преподаваемые дисциплины:</span>
-          <span className="disciplines-count">{lecturer.disciplines.length} курса</span>
+      {/* Bottom Part matching Figma: "Блок для заполнения по своему усмотрению" */}
+      <div className="card-bottom-block">
+        <div className="block-header">
+          <h4 className="block-title">Преподаваемые дисциплины:</h4>
         </div>
 
-        <div className="discipline-tabs">
-          {lecturer.disciplines.map((disc) => (
+        {/* Tabs for disciplines */}
+        <div className="disciplines-tabs-row">
+          {lecturer.disciplines.map((disc, idx) => (
             <button
               key={disc.id}
-              className={`disc-tab ${disc.id === selectedDisciplineId ? 'active' : ''}`}
-              onClick={() => setSelectedDisciplineId(disc.id)}
+              className={`disc-pill-btn ${idx === activeDiscIndex ? 'active' : ''}`}
+              onClick={() => setActiveDiscIndex(idx)}
             >
               {disc.title}
             </button>
           ))}
         </div>
 
-        <div className="discipline-preview-box">
-          <p className="disc-desc">
-            <strong>{activeDiscipline.title}</strong> — {activeDiscipline.description}
+        {/* Selected discipline description and all 10 topics */}
+        <div className="discipline-body-box">
+          <p className="discipline-summary">
+            ● <strong>{activeDiscipline.title}</strong> — {activeDiscipline.description}
           </p>
 
-          <div className="topics-preview-list">
-            {activeDiscipline.topics.slice(0, 3).map((topic, i) => (
-              <div key={i} className="topic-preview-item">
-                <span className="topic-number">{i + 1}.</span>
-                <span className="topic-text">{topic}</span>
+          <ol className="ten-topics-list">
+            {activeDiscipline.topics.map((topic, i) => (
+              <li key={i} className="topic-list-item">
+                <span className="topic-text-content">{topic}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Tariffs and Booking Button */}
+        <div className="card-tariffs-wrap">
+          <h4 className="tariffs-heading">Тарифы:</h4>
+          <div className="tariffs-row-grid">
+            {lecturer.tariffs.map((t, idx) => (
+              <div key={idx} className="tariff-box">
+                <span className="tariff-title-text">{t.title}</span>
+                <span className="tariff-price-text">{t.price.toLocaleString('ru-RU')} ₽</span>
+                <button
+                  className="btn-select-tariff"
+                  onClick={() => onBook(lecturer, t)}
+                >
+                  Записаться
+                </button>
               </div>
             ))}
           </div>
-
-          <button
-            className="view-all-topics-btn"
-            onClick={() => onOpenDetails(lecturer, activeDiscipline.id)}
-          >
-            Смотреть все 10 лекций дисциплины →
-          </button>
         </div>
       </div>
-
-      <div className="lecturer-tariffs-section">
-        <span className="tariffs-title">Стоимость и тарифы:</span>
-        <div className="tariffs-grid">
-          {lecturer.tariffs.map((tariff, idx) => (
-            <div key={idx} className="tariff-card">
-              <span className="tariff-name">{tariff.title}</span>
-              <span className="tariff-price">{tariff.price.toLocaleString('ru-RU')} ₽</span>
-              <button
-                className="tariff-book-btn"
-                onClick={() => onBook(lecturer, tariff)}
-              >
-                Выбрать
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="lecturer-card-footer">
-        <button
-          className="btn btn-secondary card-details-btn"
-          onClick={() => onOpenDetails(lecturer, activeDiscipline.id)}
-        >
-          Подробнее о лекторе и программе
-        </button>
-        <button
-          className="btn btn-primary card-book-btn"
-          onClick={() => onBook(lecturer, lecturer.tariffs[0])}
-        >
-          Записаться
-        </button>
-      </div>
-    </article>
+    </div>
   );
 }

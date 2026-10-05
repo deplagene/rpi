@@ -1,26 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import Hero from './components/Hero/Hero';
 import About from './components/About/About';
 import Partners from './components/Partners/Partners';
 import LecturersSection from './components/Lecturers/LecturersSection';
-import Calculator from './components/Calculator/Calculator';
-import HowItWorks from './components/HowItWorks/HowItWorks';
-import Reviews from './components/Reviews/Reviews';
-import FAQ from './components/FAQ/FAQ';
-import Contact from './components/Contact/Contact';
-import Footer from './components/Footer/Footer';
 import BookingModal from './components/BookingModal/BookingModal';
 import { LECTURERS_DATA } from './data/lecturersData';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeSection, setActiveSection] = useState('home');
   const [imageSourceMode, setImageSourceMode] = useState('cloud'); // 'cloud' | 'local'
 
   // Booking Modal State
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingLecturer, setBookingLecturer] = useState(null);
   const [bookingTariff, setBookingTariff] = useState(null);
+
+  // Track active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'partners', 'lecturers'];
+      const scrollPos = window.scrollY + 100;
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavigate = (sectionId) => {
+    setActiveSection(sectionId);
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleOpenBooking = (lecturer = null, tariff = null) => {
     setBookingLecturer(lecturer || LECTURERS_DATA[0]);
@@ -36,110 +61,37 @@ export default function App() {
     setImageSourceMode((prev) => (prev === 'cloud' ? 'local' : 'cloud'));
   };
 
-  const handleNavigate = (tabId) => {
-    setActiveTab(tabId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <div className="app-layout">
+    <div className="site-wrapper">
       <Header
-        activeTab={activeTab}
-        onTabChange={handleNavigate}
-        onOpenBooking={() => handleOpenBooking()}
+        activeSection={activeSection}
+        onNavigate={handleNavigate}
         imageSourceMode={imageSourceMode}
         onToggleImageSource={handleToggleImageSource}
       />
 
       <main className="main-content">
-        {activeTab === 'home' && (
-          <>
-            <Hero
-              onFindLecturer={() => {
-                const el = document.getElementById('lecturers');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else setActiveTab('lecturers');
-              }}
-              onLearnMore={() => {
-                const el = document.getElementById('about');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else setActiveTab('about');
-              }}
-            />
-            <About
-              onExploreLecturers={() => {
-                const el = document.getElementById('lecturers');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else setActiveTab('lecturers');
-              }}
-              onContactUs={() => {
-                const el = document.getElementById('contacts');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else setActiveTab('contacts');
-              }}
-            />
-            <Partners
-              onBecomePartner={() => {
-                const el = document.getElementById('contacts');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else setActiveTab('contacts');
-              }}
-            />
-            <LecturersSection
-              lecturers={LECTURERS_DATA}
-              onBookLecturer={handleOpenBooking}
-              imageSourceMode={imageSourceMode}
-              onToggleImageSource={handleToggleImageSource}
-            />
-            <Calculator
-              lecturers={LECTURERS_DATA}
-              onBookWithCalculation={(lect, customTariff) => handleOpenBooking(lect, customTariff)}
-            />
-            <HowItWorks
-              onActionClick={() => {
-                const el = document.getElementById('lecturers');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-            />
-            <Reviews />
-            <FAQ />
-            <Contact />
-          </>
-        )}
-
-        {activeTab === 'lecturers' && (
-          <LecturersSection
-            lecturers={LECTURERS_DATA}
-            onBookLecturer={handleOpenBooking}
-            imageSourceMode={imageSourceMode}
-            onToggleImageSource={handleToggleImageSource}
-          />
-        )}
-
-        {activeTab === 'partners' && (
-          <Partners onBecomePartner={() => handleNavigate('contacts')} />
-        )}
-
-        {activeTab === 'about' && (
-          <About
-            onExploreLecturers={() => handleNavigate('lecturers')}
-            onContactUs={() => handleNavigate('contacts')}
-          />
-        )}
-
-        {activeTab === 'calculator' && (
-          <Calculator
-            lecturers={LECTURERS_DATA}
-            onBookWithCalculation={(lect, customTariff) => handleOpenBooking(lect, customTariff)}
-          />
-        )}
-
-        {activeTab === 'faq' && <FAQ />}
-
-        {activeTab === 'contacts' && <Contact />}
+        <Hero onFindLecturer={() => handleNavigate('lecturers')} />
+        <About />
+        <Partners />
+        <LecturersSection
+          lecturers={LECTURERS_DATA}
+          onBookLecturer={handleOpenBooking}
+          imageSourceMode={imageSourceMode}
+        />
       </main>
 
-      <Footer onNavigate={handleNavigate} />
+      <footer className="simple-footer">
+        <div className="container footer-content">
+          <p>© {new Date().getFullYear()} Учебная платформа. Все права защищены.</p>
+          <div className="footer-links-row">
+            <button onClick={() => handleNavigate('home')}>Главная</button>
+            <button onClick={() => handleNavigate('about')}>О нас</button>
+            <button onClick={() => handleNavigate('partners')}>Партнеры</button>
+            <button onClick={() => handleNavigate('lecturers')}>Лекторы</button>
+          </div>
+        </div>
+      </footer>
 
       <BookingModal
         isOpen={isBookingOpen}

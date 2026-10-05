@@ -167,3 +167,42 @@ input, select, textarea {
   padding: 14px 28px;
   font-size: 16px;
 }
+
+/* Simple Footer */
+.simple-footer {
+  padding: 30px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  font-size: 13.5px;
+  color: #666666;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-links-row {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links-row button {
+  font-size: 13.5px;
+  color: #555555;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.footer-links-row button:hover {
+  color: #2021a4;
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}
