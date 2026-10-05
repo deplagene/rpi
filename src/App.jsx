@@ -1,97 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import Hero from './components/Hero/Hero';
-import About from './components/About/About';
-import Partners from './components/Partners/Partners';
-import LecturersSection from './components/Lecturers/LecturersSection';
-import BookingModal from './components/BookingModal/BookingModal';
-import { LECTURERS_DATA } from './data/lecturersData';
+import { Footer } from "./components/Footer.jsx";
+import { NavBar } from "./components/NavBar.jsx";
+import ContactsPage from "./pages/ContactsPage.jsx";
+import CoursePage from "./pages/CoursePage.jsx";
+import CoursesPage from "./pages/CoursesPage.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import LecturerPage from "./pages/LecturerPage.jsx";
+import LecturersPage from "./pages/LecturersPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import { useRouter } from "./router/context.js";
+import { Router } from "./router/Router.jsx";
 
-export default function App() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [imageSourceMode, setImageSourceMode] = useState('cloud'); // 'cloud' | 'local'
+const NAV_ITEMS = [
+  { id: "home", label: "Главная", href: "/" },
+  { id: "partners", label: "Партнеры", href: "/#partners" },
+  { id: "about", label: "О нас", href: "/#about" },
+  { id: "lecturers", label: "Лекторы", href: "/lecturers" },
+  { id: "courses", label: "Курсы", href: "/courses" },
+];
 
-  // Booking Modal State
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [bookingLecturer, setBookingLecturer] = useState(null);
-  const [bookingTariff, setBookingTariff] = useState(null);
+const routes = [
+  { path: "/lecturers/:id", Page: LecturerPage },
+  { path: "/lecturers", Page: LecturersPage },
+  { path: "/courses/:id", Page: CoursePage },
+  { path: "/courses", Page: CoursesPage },
+  { path: "/contacts", Page: ContactsPage },
+  { path: "/", Page: HomePage },
+  { path: "*", Page: NotFoundPage },
+];
 
-  // Track active section on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'partners', 'about', 'lecturers'];
-      const scrollPos = window.scrollY + 120;
+function getActiveId(pathname, hash) {
+  if (pathname.startsWith("/lecturers")) return "lecturers";
+  if (pathname.startsWith("/courses")) return "courses";
+  if (pathname.startsWith("/contacts")) return "contacts";
+  if (pathname === "/") {
+    if (hash === "#partners") return "partners";
+    if (hash === "#about") return "about";
+    return "home";
+  }
+  return null;
+}
 
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleNavigate = (sectionId) => {
-    setActiveSection(sectionId);
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleOpenBooking = (lecturer = null, tariff = null) => {
-    setBookingLecturer(lecturer || LECTURERS_DATA[0]);
-    setBookingTariff(tariff || (lecturer ? lecturer.tariffs[0] : LECTURERS_DATA[0].tariffs[0]));
-    setIsBookingOpen(true);
-  };
-
-  const handleCloseBooking = () => {
-    setIsBookingOpen(false);
-  };
-
-  const handleToggleImageSource = () => {
-    setImageSourceMode((prev) => (prev === 'cloud' ? 'local' : 'cloud'));
-  };
+function AppShell() {
+  const { location, route } = useRouter();
+  const Page = route?.Page ?? NotFoundPage;
+  const activeId = getActiveId(location.pathname, location.hash);
 
   return (
-    <div className="canvas-wrapper">
-      {/* Frame 1: Главная */}
-      <Hero
-        activeSection={activeSection}
-        onNavigate={handleNavigate}
-        imageSourceMode={imageSourceMode}
-        onToggleImageSource={handleToggleImageSource}
-        onFindLecturer={() => handleNavigate('lecturers')}
-      />
-
-      {/* Frame 2: О нас */}
-      <About />
-
-      {/* Frame 3: Партнеры */}
-      <Partners />
-
-      {/* Frame 4: Лекторы */}
-      <LecturersSection
-        lecturers={LECTURERS_DATA}
-        onBookLecturer={handleOpenBooking}
-        imageSourceMode={imageSourceMode}
-      />
-
-      {/* Booking Form Modal */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={handleCloseBooking}
-        lecturers={LECTURERS_DATA}
-        initialLecturer={bookingLecturer}
-        initialTariff={bookingTariff}
-      />
+    <div className="layout">
+      <a className="skip-link" href="#main">
+        К содержимому
+      </a>
+      <header className="layout__header">
+        <NavBar items={NAV_ITEMS} activeId={activeId} />
+      </header>
+      <main id="main" className="layout__main" tabIndex={-1}>
+        <Page />
+      </main>
+      <div className="layout__footer">
+        <Footer />
+      </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router routes={routes}>
+      <AppShell />
+    </Router>
   );
 }
