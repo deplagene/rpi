@@ -2,6 +2,10 @@
 @import "./styles/reset.css";
 @import "./styles/forms.css";
 
+html {
+  scrollbar-gutter: stable;
+}
+
 #root {
   min-height: 100svh;
 }

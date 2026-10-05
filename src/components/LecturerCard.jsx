@@ -17,6 +17,7 @@ export function LecturerCard({
   tariffs,
   href,
   bookingHref,
+  onShowDetails,
 }) {
   return (
     <article className="lecturer-card">
@@ -53,6 +54,16 @@ export function LecturerCard({
       <div className="lecturer-card__offer">
         {teaser ? <p className="lecturer-card__teaser">{teaser}</p> : null}
         {tariffs?.length ? <TariffList tariffs={tariffs} /> : null}
+        {onShowDetails ? (
+          <Button
+            className="lecturer-card__cta"
+            onClick={onShowDetails}
+            aria-haspopup="dialog"
+            aria-label={`Подробнее: ${fullName}`}
+          >
+            Подробнее
+          </Button>
+        ) : null}
         <Link href={href} className="button button--text lecturer-card__cta">
           Открыть профиль
         </Link>

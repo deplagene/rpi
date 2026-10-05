@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { lecturerPhoto } from "../api/photos.js";
 import { Button } from "../components/Button.jsx";
 import { LecturerCard } from "../components/LecturerCard.jsx";
+import { LecturerDetailsModal } from "../components/LecturerDetailsModal.jsx";
 import { courses, getCoursesByLecturerId } from "../data/courses.js";
 import { formatLecturersCount } from "../data/format.js";
 import { lecturers } from "../data/lecturers.js";
@@ -31,6 +32,8 @@ function matchesQuery(lecturer, courseTitles, query) {
 }
 
 export default function LecturersPage() {
+  const [selectedLecturer, setSelectedLecturer] = useState(null);
+  const closeDetails = useCallback(() => setSelectedLecturer(null), []);
   const { location, navigate } = useRouter();
   const query = new URLSearchParams(location.search).get("q") ?? "";
 
@@ -133,6 +136,7 @@ export default function LecturersPage() {
                   tariffs={lecturer.tariffs}
                   href={`/lecturers/${lecturer.id}`}
                   bookingHref={`/contacts?lecturer=${lecturer.id}`}
+                  onShowDetails={() => setSelectedLecturer(lecturer)}
                 />
               </li>
             );
@@ -148,6 +152,12 @@ export default function LecturersPage() {
           <Button href="/lecturers">Сбросить поиск</Button>
         </div>
       )}
+      {selectedLecturer ? (
+        <LecturerDetailsModal
+          lecturer={selectedLecturer}
+          onClose={closeDetails}
+        />
+      ) : null}
     </div>
   );
 }
